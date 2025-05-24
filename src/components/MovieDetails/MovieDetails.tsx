@@ -1,23 +1,27 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import Skelton from '../Skelton/Skelton';
 import StarRating from '../StarRating/StarRating';
+import { selectSelectedRowMovie } from '../../store/selectors';
+import type { Movie } from '@app/store/movieSlice';
+import { formatValue } from '../../helpers/helper';
+
 
 export type MovieDetailsProps = {
-    title: string;
-    director: string;
-    description: string;
-    rating?: number;
-    posterUrl?: string;
+    selectedEpisodeId: string;
 };
 
-export const MovieDetails: FC<MovieDetailsProps> = ({ title, description, director, rating }) => {
+export const MovieDetails: FC<MovieDetailsProps> = ({ selectedEpisodeId }) => {
+    const selectedRow = useSelector((state: { movies: Movie }) => selectSelectedRowMovie(state, selectedEpisodeId));
+    const { title, opening_crawl: description, director, rating } = selectedRow;
+    const formattedTitle = formatValue('title', selectedRow);
 
     return (
-        <div style={{ flex: 1, padding: '20px' }}>
+        <MovieDetailSection>
             <MovieDetail>
                 <MovieTitle>
-                    {title ? title : <Skelton width='100%' height='30px' />}
+                    {title ? formattedTitle : <Skelton width='100%' height='30px' />}
                 </MovieTitle>
                 <MoviePosterContainer>
                     {!description ? <Skelton width='100%' height='100px' /> :
@@ -31,15 +35,20 @@ export const MovieDetails: FC<MovieDetailsProps> = ({ title, description, direct
 
                 </MoviePosterContainer>
                 <MovieDirector>
-                    {director ?  `Directed by: ${director}`: <Skelton width='100%' height='30px' />}
+                    {director ? `Directed by: ${director}` : <Skelton width='100%' height='30px' />}
                 </MovieDirector>
                 <MovieRating>
-                {director ?  <MovieRatingWrapper>Average rating: <StarRating readonly={true} totalStars={10} ratingNumber={rating}/></MovieRatingWrapper>: <Skelton width='100%' height='30px' />}
+                    {director ? <MovieRatingWrapper>Average rating: <StarRating readonly={true} totalStars={10} ratingNumber={rating} /></MovieRatingWrapper> : <Skelton width='100%' height='30px' />}
                 </MovieRating>
             </MovieDetail>
-        </div>
+        </MovieDetailSection>
     );
 }
+
+const MovieDetailSection = styled.section`
+    flex: 1;
+    padding: 10px
+`
 
 const MovieDetail = styled.div`
     display: flex;
@@ -79,7 +88,7 @@ const MovieDirector = styled.div`
     margin-top: 10px;
 `;
 
-const MovieRatingWrapper= styled.div`
+const MovieRatingWrapper = styled.div`
     display: flex;
     flex-direction: row;
     gap: 10px;

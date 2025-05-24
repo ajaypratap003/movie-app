@@ -1,34 +1,26 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import Dropdown from '../Dropdown/Dropdowncomp';
+import { Dropdown, DropdownOption } from '../Dropdown/Dropdown';
 import { Input } from '../Input';
 
 export type MovieSearchProps = {
-    sortBy: string;
     searchQuery: string;
     onChangeSortBy: (value: string) => void;
     onChangeSearchQuery: (value: string) => void;
 }
 
-const sortByOptions: string[] = [
-    'Sort by...',
-    'title',
-    'release_date',
-    'episode_id',
-    'rating'
+const sortByOptions: DropdownOption[] = [
+    { label: 'Title', value: 'title' },
+    { label: 'Release Date', value: 'release_date' },
+    { label: 'Episode Id', value: 'episode_id' },
+    { label: 'Rating', value: 'rating' }
 ];
 
-// const sortByOptions1: DropdownOption[] = [
-//     { label: 'Title', value: 'title' },
-//     { label: 'Release Date', value: 'release_date' },
-//     { label: 'Episode Id', value: 'episode_id' }
-// ];
-
-export const MovieSearch: FC<MovieSearchProps> = ({ sortBy,  onChangeSortBy, searchQuery, onChangeSearchQuery }) => {
+export const MovieSearch: FC<MovieSearchProps> = ({onChangeSortBy, searchQuery, onChangeSearchQuery }) => {
 
     return (
         <MovieSearchSection>
-            <Dropdown value={sortBy} options={sortByOptions} onChange={onChangeSortBy} />
+            <Dropdown options={sortByOptions} onChange={onChangeSortBy} placeholder='Sort by...'/>
             <Input value={searchQuery} placeholder='Type to search...' onChange={onChangeSearchQuery} />
         </MovieSearchSection>
     );

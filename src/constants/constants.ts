@@ -1,0 +1,1 @@
+export const MOVIE_API_URL = 'https://swapi.py4e.com/api/films/?format=json';
