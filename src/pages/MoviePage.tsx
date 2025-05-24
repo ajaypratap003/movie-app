@@ -5,12 +5,11 @@ import { useFetchData } from '../hooks';
 import { generateRandomRating } from '../helpers/helper';
 import { useSelector, useDispatch } from 'react-redux';
 import { setMovies, setSortBy, setSearchQuery } from '../store/movieSlice';
-import { selectSortBy, selectSearchQuery, selectFilteredMovies } from '../store/selectors';
+import { selectSearchQuery, selectFilteredMovies } from '../store/selectors';
 import { MOVIE_API_URL } from '../constants/constants';
 
 const MoviePage: React.FC = () => {
     const dispatch = useDispatch();
-    const sortBy = useSelector(selectSortBy);
     const searchText = useSelector(selectSearchQuery);
     const filteredMovies = useSelector(selectFilteredMovies);
 
@@ -43,7 +42,7 @@ const MoviePage: React.FC = () => {
 
     return (
         <>
-            <MovieSearch sortBy={sortBy} searchQuery={searchText} onChangeSortBy={onChangeSortBy} onChangeSearchQuery={onChangeSearchText} />
+            <MovieSearch searchQuery={searchText} onChangeSortBy={onChangeSortBy} onChangeSearchQuery={onChangeSearchText} />
             <HorizontalLine />
             <MovieTableWrapper>
                 <MovieTable data={filteredMovies} onRowClick={onRowClick} />
