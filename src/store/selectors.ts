@@ -1,10 +1,14 @@
 import type { Movie } from './movieSlice';
 import { createSelector } from '@reduxjs/toolkit';
+
 // Selectors for accessing the state in components
+// Select the movies array from the state
 export const selectMovies = (state: { movies: Movie }) => state.movies.movies;
+// Select the sort criteria from the state
 export const selectSortBy = (state: { movies: Movie }) => state.movies.sortBy;
+// Select the search query from the state
 export const selectSearchQuery = (state: { movies: Movie }) => state.movies.searchQuery;
-export const selectFilteredMovies = (state: { movies: Movie }) => {
+const filteredMovies = (state: { movies: Movie }) => {
     const { movies, sortBy, searchQuery } = state.movies;
     let filteredMovies = [...movies];
 
@@ -15,7 +19,7 @@ export const selectFilteredMovies = (state: { movies: Movie }) => {
         // You can modify the filtering logic as needed
         filteredMovies = filteredMovies?.filter((movie) => movie?.title?.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
             String(movie?.episode_id).includes(searchQuery.toLowerCase().trim()));
-            
+
         // Uncomment the following lines if you want to search across all fields
         // filteredMovies = filteredMovies.filter(movie =>
         //     Object.values(movie).some(val =>
@@ -36,10 +40,16 @@ export const selectFilteredMovies = (state: { movies: Movie }) => {
 
     return filteredMovies;
 }
+// Create a selector to get the filtered movies based on search query and sort criteria
+export const selectFilteredMovies = createSelector([filteredMovies], (filteredMovies) => filteredMovies);
 
-export const selectSelectedRowMovie = (state: { movies: Movie }, episodeId: string) => {
-    return state.movies.movies.find(movie => movie?.episode_id === episodeId) || { title: '', opening_crawl: '', director: '', producer: '', release_date: '' };
+// Select the movie details for the selected row
+const selectedRowMovie = (state: { movies: Movie }, episodeId: string) => {
+    return state.movies.movies.find(movie => movie?.episode_id === episodeId) || { title: '', opening_crawl: '', director: '', producer: '', release_date: '', imdb_id:'' };
 };
+
+// Create a selector to get the selected row movie details
+export const selectSelectedRowMovie = createSelector([selectedRowMovie], (selectedRow) => selectedRow);
 
 
 

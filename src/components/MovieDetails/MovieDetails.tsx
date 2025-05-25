@@ -1,45 +1,78 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import Skelton from '../Skelton/Skelton';
 import StarRating from '../StarRating/StarRating';
-import { selectSelectedRowMovie } from '../../store/selectors';
-import type { Movie } from '@app/store/movieSlice';
-import { formatValue } from '../../helpers/helper';
-
+import { useFetchData } from '../../hooks';
+import { IDMB_API_URL } from '../../constants/constants';
+import { calculateRatingScale } from '../../helpers/helper';
+import { Rating } from '../Rating';
+import { Loader } from '../Loader';
+import { ErrorMessage } from '../ErrorMessage';
 
 export type MovieDetailsProps = {
-    selectedEpisodeId: string;
+    imdbId: string;
 };
 
-export const MovieDetails: FC<MovieDetailsProps> = ({ selectedEpisodeId }) => {
-    const selectedRow = useSelector((state: { movies: Movie }) => selectSelectedRowMovie(state, selectedEpisodeId));
-    const { title, opening_crawl: description, director, rating } = selectedRow;
-    const formattedTitle = formatValue('title', selectedRow);
+type MovieDetailsData = {
+    Title?: string;
+    Plot?: string;
+    Director?: string;
+    imdbRating?: string;
+    Poster?: string;
+    Writer?: string;
+    Actors?: string;
+    Language?: string;
+    Country?: string;
+    Awards?: string;
+    Ratings?: { Source: string; Value: string }[];
+}
+
+export const MovieDetails: FC<MovieDetailsProps> = ({ imdbId, }) => {
+    const { data = [], loading } = useFetchData<any>(`${IDMB_API_URL}&i=${imdbId}`);
+
+    if (loading) return <div style={{width:'50%', height:'100%'}}><Loader/></div>;
+
+    const { Title, Plot: Description, Director, imdbRating, Poster, Writer, Actors, Language, Country, Awards, Ratings }: MovieDetailsData = data || {};
 
     return (
         <MovieDetailSection>
             <MovieDetail>
                 <MovieTitle>
-                    {title ? formattedTitle : <Skelton width='100%' height='30px' />}
+                    {Title ? Title : <Skelton width='100%' height='30px' />}
                 </MovieTitle>
                 <MoviePosterContainer>
-                    {!description ? <Skelton width='100%' height='100px' /> :
+                    {!Description ? <Skelton width='100%' height='100px' /> :
                         <>
-                            <MoviePoster src='https://m.media-amazon.com/images/M/MV5BMzczODY2ZmMtYjU4MS00MzFjLTk2YTAtYTMyMmFlNTk3OTIyXkEyXkFqcGc@._V1_SX300.jpg'></MoviePoster>
+                            <MoviePoster src={Poster || 'https://tse4.mm.bing.net/th?id=OIP.YYgJscCJOLEEKRvDIslsOgAAAA&pid=Api&P=0&h=220'}></MoviePoster>
                             <MovieDescription>
-                                {description}
+                                {Description}
                             </MovieDescription>
                         </>
                     }
 
                 </MoviePosterContainer>
-                <MovieDirector>
-                    {director ? `Directed by: ${director}` : <Skelton width='100%' height='30px' />}
-                </MovieDirector>
+                <Div>
+                    {Director ? `Directed by: ${Director}` : <Skelton width='100%' height='30px' />}
+                </Div>
+                <Div>
+                    {Writer ? `Writer: ${Writer}` : <Skelton width='100%' height='30px' />}
+                </Div>
+                <Div>
+                    {Actors ? `Actors: ${Actors}` : <Skelton width='100%' height='30px' />}
+                </Div>
+                <Div>
+                    {Language ? `Language: ${Language}` : <Skelton width='100%' height='30px' />}
+                </Div>
+                <Div>
+                    {Country ? `Country: ${Country}` : <Skelton width='100%' height='30px' />}
+                </Div>
+                <Div>
+                    {Awards ? `Awards: ${Awards}` : <Skelton width='100%' height='30px' />}
+                </Div>
                 <MovieRating>
-                    {director ? <MovieRatingWrapper>Average rating: <StarRating readonly={true} totalStars={10} ratingNumber={rating} /></MovieRatingWrapper> : <Skelton width='100%' height='30px' />}
+                    {imdbRating ? <MovieRatingWrapper>{calculateRatingScale(Number(imdbRating))} rating: <StarRating readonly={true} totalStars={10} ratingNumber={Number(imdbRating)} /></MovieRatingWrapper> : <Skelton width='100%' height='30px' />}
                 </MovieRating>
+                <Rating ratings={Ratings} />
             </MovieDetail>
         </MovieDetailSection>
     );
@@ -84,7 +117,7 @@ const MovieDescription = styled.span`
     }
 `;
 
-const MovieDirector = styled.div`
+const Div = styled.div`
     margin-top: 10px;
 `;
 

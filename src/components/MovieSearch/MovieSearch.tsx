@@ -21,7 +21,7 @@ export const MovieSearch: FC<MovieSearchProps> = ({onChangeSortBy, searchQuery, 
     return (
         <MovieSearchSection>
             <Dropdown options={sortByOptions} onChange={onChangeSortBy} placeholder='Sort by...'/>
-            <Input value={searchQuery} placeholder='Type to search...' onChange={onChangeSearchQuery} />
+            <Input value={searchQuery} placeholder='Search movie by title or episode id' onChange={onChangeSearchQuery} />
         </MovieSearchSection>
     );
 }

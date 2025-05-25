@@ -1,16 +1,16 @@
 import { useState } from 'react';
+import styled from 'styled-components';
 import './table.css';
-import StarRating from '../../components/StarRating/StarRating'
+import { FormatColumnData } from './FormatColumnData';
 
 export type TableProps<T> = {
     data: T[];
     columns: { header: string; accessor: keyof T }[];
     disableddHeader?: boolean;
-    prepareRow: (name: string, row: T) => string;
     onRowClick: (row: T) => void;
 }
 
-export const Table = <T,>({ data, columns, disableddHeader = false, prepareRow, onRowClick }: TableProps<T>) => {
+export const Table = <T,>({ data, columns, disableddHeader = false, onRowClick }: TableProps<T>) => {
     const [selectedRow, setSelectedRow] = useState<T | null>(null);
 
     const handleRowClick = (row: T) => {
@@ -19,7 +19,7 @@ export const Table = <T,>({ data, columns, disableddHeader = false, prepareRow, 
     };
 
     if (!data || data.length === 0) {
-        return <div className="no-data">No data available</div>;
+        return <NoDataFound>No data available</NoDataFound>;
     }
 
     return (
@@ -38,7 +38,7 @@ export const Table = <T,>({ data, columns, disableddHeader = false, prepareRow, 
                     <tr key={rowIndex} onClick={() => handleRowClick(row)} style={{ backgroundColor: selectedRow === row ? '#f5f5f5' : '' }}>
                         {columns.map((column) => (
                             <td key={String(column.accessor)}>
-                              {column.accessor==='rating' ? <StarRating readonly={true} totalStars={10} ratingNumber={Number(row[column.accessor])}/>:prepareRow(String(column.accessor), row)}
+                                <FormatColumnData columnName={String(column.accessor)} row={row} />
                             </td>
                         ))}
                     </tr>
@@ -47,3 +47,14 @@ export const Table = <T,>({ data, columns, disableddHeader = false, prepareRow, 
         </table>
     );
 };
+
+const NoDataFound = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    color: #888;
+`;

@@ -32,3 +32,17 @@ export const useFetchData = <T,>(url: string): FetchState<T> => {
 
     return { data, loading, error };
 };
+
+export const fetchAllImdbData = async (API_URL: string, IMDB_IDS: { episode_id: number, imdb_id: string }[],) => {
+    try {
+        const responses = await Promise.all(
+            IMDB_IDS.map(({ imdb_id }) =>
+                fetch(`${API_URL}&i=${imdb_id}`).then((response) => response.json())
+            )
+        );
+        return responses;
+    } catch (err) {
+        console.error("Error fetching IMDb data:", err);
+        return [];
+    }
+};

@@ -1,3 +1,6 @@
+import { IMDB_IDS } from '../constants/constants';
+
+// Helper functions for various utilities
 export const numberToRoman = (num: number): string => {
     if (num === 0) return 'N/A';
     const romanNumList: { [key: number]: string } = {
@@ -30,19 +33,31 @@ export const numberToRoman = (num: number): string => {
     return romanNum;
 }
 
-export const formatValue = (name: string, row: any): string => {
-    if (!row || !name) return '';
-    if (name === "episode_id") {
-        return `EPISODE ${row[name]}`;
-    } else if (name === "title") {
-        const romanNumber = numberToRoman(row['episode_id']);
-        return `EPISODE ${romanNumber} - ${row[name]}`;
-    }
-    return row[name];
-}
-
+// Parse lines from a string by replacing escaped newline characters with actual newlines
 export const parseLines = (value: string) => value.replace(/(\\n)/g, "\n");
 
+// Generate a random rating between 0 and 10
 export const generateRandomRating = (): number => {
     return parseInt((Math.random() * 10).toFixed(1));
+};
+
+// Get IMDB ID based on episode ID
+export const getImdbId = (episodeId: number): string => {
+    const imdbId = IMDB_IDS.find(item => item.episode_id === episodeId);
+    return imdbId ? imdbId.imdb_id : '';
+}
+
+// Calculate movie rating scale based on rating number
+export const calculateRatingScale = (rating: number): string => {
+    if (rating >= 8) {
+        return 'Excellent';
+    } else if (rating >= 6) {
+        return 'Good';
+    } else if (rating >= 4) {
+        return 'Average';
+    } else if (rating >= 2) {
+        return 'Poor';
+    } else {
+        return 'Terrible';
+    }
 };

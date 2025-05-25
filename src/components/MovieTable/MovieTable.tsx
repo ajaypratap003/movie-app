@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { Table } from '../Table';
-import { formatValue } from '../../helpers/helper';
 
 export type MovieTableProps = {
     data: any[];
@@ -21,7 +20,7 @@ export const MovieTable: FC<MovieTableProps> = ({ data, onRowClick }) => {
     return (
         <MovieTableWrapper>
             <MovieTableSection>
-                <Table data={data} columns={columns} prepareRow={formatValue} onRowClick={onRowClick} />
+                <Table data={data} columns={columns}  onRowClick={onRowClick} />
             </MovieTableSection>
         </MovieTableWrapper>
     );

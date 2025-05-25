@@ -7,3 +7,5 @@ export * from './MovieDetails';
 export * from './Loader';
 export * from './StarRating';
 export * from './Skelton';
+export * from './Rating';
+export * from './ErrorMessage';
