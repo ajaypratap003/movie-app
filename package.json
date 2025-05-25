@@ -1,5 +1,17 @@
 {
   "name": "movie-app",
+  "homepage":"https://ajaypratap003.github.io/movie-app",
+  "description": "A React-based movie application that allows users to search for moviesa, view details and sort them by various criteria. It features a responsive design, Redux for state management, and integrates with the TMDB API to fetch movie data.",
+  "keywords": [
+    "react",
+    "redux",
+    "movie",
+    "application",
+    "tmdb",
+    "api",
+    "responsive",
+    "state management"
+  ],
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -71,7 +83,9 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -150,6 +164,7 @@
   "devDependencies": {
     "@playwright/test": "^1.52.0",
     "@types/lodash": "^4.17.17",
-    "ajv": "^7.2.4"
+    "ajv": "^7.2.4",
+    "gh-pages": "^6.3.0"
   }
 }
