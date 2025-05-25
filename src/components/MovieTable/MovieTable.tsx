@@ -20,7 +20,7 @@ export const MovieTable: FC<MovieTableProps> = ({ data, onRowClick }) => {
     return (
         <MovieTableWrapper>
             <MovieTableSection>
-                <Table data={data} columns={columns}  onRowClick={onRowClick} />
+                <Table data={data} columns={columns}  onRowClick={onRowClick} enableddHeader={false}/>
             </MovieTableSection>
         </MovieTableWrapper>
     );

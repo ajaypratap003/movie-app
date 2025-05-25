@@ -59,7 +59,7 @@ const StarRating: FC<StarRatingProps> = ({ totalStars = 5, onRatingChange, ratin
     };
 
     return (
-        <StarContainer>
+        <StarContainer data-testid="star-rating">
             {Array.from({ length: totalStars }).map((_, index) => (
                 <span
                     key={index}

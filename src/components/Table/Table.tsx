@@ -6,11 +6,11 @@ import { FormatColumnData } from './FormatColumnData';
 export type TableProps<T> = {
     data: T[];
     columns: { header: string; accessor: keyof T }[];
-    disableddHeader?: boolean;
+    enableddHeader?: boolean;
     onRowClick: (row: T) => void;
 }
 
-export const Table = <T,>({ data, columns, disableddHeader = false, onRowClick }: TableProps<T>) => {
+export const Table = <T,>({ data, columns, enableddHeader = true, onRowClick }: TableProps<T>) => {
     const [selectedRow, setSelectedRow] = useState<T | null>(null);
 
     const handleRowClick = (row: T) => {
@@ -24,7 +24,7 @@ export const Table = <T,>({ data, columns, disableddHeader = false, onRowClick }
 
     return (
         <table>
-            {disableddHeader && (
+            {enableddHeader && (
                 <thead>
                     <tr>
                         {columns.map((column) => (
