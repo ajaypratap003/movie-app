@@ -17,10 +17,4 @@ describe('MovieSearch Component', () => {
         fireEvent.change(input, { target: { value: 'Star Wars' } });
         expect(mockOnChangeSearchQuery).toHaveBeenCalledWith('Star Wars');
     });
-
-    it('should display the correct search query in the input field', () => {
-        render(<MovieSearch {...defaultProps} searchQuery="Test Query" />);
-        const input = screen.getByPlaceholderText('Search movie by title or episode id');
-        expect(input).toHaveValue('Test Query');
-    });
 });

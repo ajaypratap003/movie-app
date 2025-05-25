@@ -2,13 +2,19 @@ import { FC, useState } from "react";
 import styled from 'styled-components';
 
 export type InputProps = {
-    value: string,
     placeholder: string,
     onChange: (value: string) => void,
 }
 
-export const Input: FC<InputProps> = ({ value, placeholder, onChange }) => {
+export const Input: FC<InputProps> = ({ placeholder, onChange }) => {
     const [isFocused, setIsFocused] = useState(false);
+    const [value, setValue] = useState<string>('');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.value;
+        setValue(newValue);
+        onChange(newValue);
+    }
 
     return (
         <InputWrapper>
@@ -16,7 +22,7 @@ export const Input: FC<InputProps> = ({ value, placeholder, onChange }) => {
             <InputField
                 value={value}
                 placeholder={placeholder}
-                onChange={(e) => onChange(e.target.value)}
+                onChange={handleChange}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 isFocused={isFocused}

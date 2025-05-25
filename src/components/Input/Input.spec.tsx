@@ -3,7 +3,6 @@ import { Input, InputProps } from "./Input";
 
 describe("Input Component", () => {
     const defaultProps: InputProps = {
-        value: "",
         placeholder: "Enter text",
         onChange: jest.fn(),
     };

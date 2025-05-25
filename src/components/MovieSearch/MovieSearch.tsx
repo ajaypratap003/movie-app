@@ -4,7 +4,7 @@ import { Dropdown, DropdownOption } from '../Dropdown/Dropdown';
 import { Input } from '../Input';
 
 export type MovieSearchProps = {
-    searchQuery: string;
+    searchQuery?: string;
     onChangeSortBy: (value: string) => void;
     onChangeSearchQuery: (value: string) => void;
 }
@@ -16,12 +16,12 @@ const sortByOptions: DropdownOption[] = [
     { label: 'Rating', value: 'rating' }
 ];
 
-export const MovieSearch: FC<MovieSearchProps> = ({onChangeSortBy, searchQuery, onChangeSearchQuery }) => {
+export const MovieSearch: FC<MovieSearchProps> = ({onChangeSortBy, onChangeSearchQuery }) => {
 
     return (
         <MovieSearchSection>
             <Dropdown options={sortByOptions} onChange={onChangeSortBy} placeholder='Sort by...'/>
-            <Input value={searchQuery} placeholder='Search movie by title or episode id' onChange={onChangeSearchQuery} />
+            <Input placeholder='Search movie by title or episode id' onChange={onChangeSearchQuery} />
         </MovieSearchSection>
     );
 }

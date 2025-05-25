@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import debounce from 'lodash/debounce';
 import styled from 'styled-components';
 import { MovieTable, MovieSearch, MovieDetails, Loader, ErrorMessage } from '../components';
 import { useFetchData, fetchAllImdbData } from '../hooks';
 import { getImdbId } from '../helpers/helper';
 import { useSelector, useDispatch } from 'react-redux';
 import { setMovies, setSortBy, setSearchQuery } from '../store/movieSlice';
-import { selectSearchQuery, selectFilteredMovies } from '../store/selectors';
+import { selectFilteredMovies } from '../store/selectors';
 import { MOVIE_API_URL, IMDB_IDS, IDMB_API_URL } from '../constants/constants';
 
 const MoviePage: React.FC = () => {
     const dispatch = useDispatch();
-    const searchText = useSelector(selectSearchQuery);
     const filteredMovies = useSelector(selectFilteredMovies);
     const [loadingData, setLoadingData] = useState<boolean>(false);
 
@@ -55,9 +55,12 @@ const MoviePage: React.FC = () => {
         dispatch(setSortBy(value));
     }
 
-    const onChangeSearchText = (value: string) => {
+    // Debounce the search text input to avoid too many dispatches
+    // This will wait for 200ms after the user stops typing before dispatching the action
+
+    const onChangeSearchText = debounce((value: string) => {
         dispatch(setSearchQuery(value));
-    }
+    }, 200); 
 
     const onRowClick = (row: any) => {
         setSelectedRow(row);
@@ -67,7 +70,7 @@ const MoviePage: React.FC = () => {
 
     return (
         <>
-            <MovieSearch searchQuery={searchText} onChangeSortBy={onChangeSortBy} onChangeSearchQuery={onChangeSearchText} />
+            <MovieSearch onChangeSortBy={onChangeSortBy} onChangeSearchQuery={onChangeSearchText} />
             {error && <ErrorMessage message={error} />}
             <HorizontalLine />
             <MovieTableWrapper>
